@@ -20,12 +20,15 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.khoaphamfinaltestfirebasestorage.item.ItemImage;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mData = FirebaseDatabase.getInstance().getReference();
         init();
         imgResource.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,6 +93,19 @@ public class MainActivity extends AppCompatActivity{
                         if(task.isSuccessful()){
                             Uri downloadUri = task.getResult();
                             Log.d("AAAA", "onComplete: Url: "+ downloadUri.toString());
+                            ItemImage itemImage = new ItemImage(editName.getText().toString(),String.valueOf(downloadUri));
+                            mData.child("folderImage").push().setValue(itemImage, new DatabaseReference.CompletionListener() {
+                                @Override
+                                public void onComplete(@Nullable DatabaseError databaseError, @NonNull DatabaseReference databaseReference) {
+                                    if (databaseError == null){
+                                        Toast.makeText(MainActivity.this,"Successfully saved database"
+                                                ,Toast.LENGTH_LONG).show();
+                                    }else {
+                                        Toast.makeText(MainActivity.this,"Fail to save in database",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
                         }else {
                             Toast.makeText(MainActivity.this,"fail to getDownloadUrl",Toast.LENGTH_LONG).show();
                         }
