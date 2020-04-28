@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -22,12 +23,15 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.khoaphamfinaltestfirebasestorage.adapter.ImageAdapter;
 import com.example.khoaphamfinaltestfirebasestorage.item.ItemImage;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -39,9 +43,13 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity{
+    private List<ItemImage>itemImages;
+    private ImageAdapter adapter;
     private ImageView imgResource;
     private Button btnSaveImage;
     private EditText editName;
@@ -52,6 +60,7 @@ public class MainActivity extends AppCompatActivity{
     private StorageTask uploadTask;
     private ProgressBar progressBar;
     private DatabaseReference mData;
+    private RecyclerView rclImage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,6 +143,41 @@ public class MainActivity extends AppCompatActivity{
         btnSaveImage = (Button)findViewById(R.id.btn_save);
         editName = (EditText)findViewById(R.id.edt_name);
         progressBar = (ProgressBar)findViewById(R.id.progress_bar);
+        rclImage = (RecyclerView)findViewById(R.id.rcl);
+        itemImages = new ArrayList<>();
+        adapter = new ImageAdapter(MainActivity.this,itemImages);
+        rclImage.setAdapter(adapter);
+        loadData();
+    }
+    private void loadData(){
+        mData.child("folderImage").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                ItemImage image = (ItemImage) dataSnapshot.getValue(ItemImage.class);
+                itemImages.add(new ItemImage(image.getImageName(),image.getLinkName()));
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
