@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "152688390578",
+    "firebase_url": "https://khoaphamstorage.firebaseio.com",
+    "project_id": "khoaphamstorage",
+    "storage_bucket": "khoaphamstorage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:152688390578:android:1d7b4bdcd6ad808b14f4ab",
+        "android_client_info": {
+          "package_name": "com.example.khoaphamfinaltestfirebasestorage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "152688390578-ib3avvmp53tb9ot037fokliqth0m673n.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7eD6PPjxJQJL4M3WaCd1ZuToB7s8l3qM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "152688390578-ib3avvmp53tb9ot037fokliqth0m673n.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

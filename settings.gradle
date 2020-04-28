@@ -1,0 +1,2 @@
+rootProject.name='KhoaPhamFinalTestFirebaseStorage'
+include ':app'
