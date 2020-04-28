@@ -11,12 +11,14 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity{
     private FirebaseStorage storage = FirebaseStorage.getInstance();
     final StorageReference reference = storage.getReferenceFromUrl("gs://khoaphamstorage.appspot.com");
     private StorageTask uploadTask;
+    private ProgressBar progressBar;
     private DatabaseReference mData;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity{
         btnSaveImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 Calendar calendar = Calendar.getInstance();
                 final StorageReference nameRef = reference.
                         child("image"+calendar.getTimeInMillis()+ ".png");
@@ -91,6 +95,7 @@ public class MainActivity extends AppCompatActivity{
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if(task.isSuccessful()){
+                            progressBar.setVisibility(View.GONE);
                             Uri downloadUri = task.getResult();
                             Log.d("AAAA", "onComplete: Url: "+ downloadUri.toString());
                             ItemImage itemImage = new ItemImage(editName.getText().toString(),String.valueOf(downloadUri));
@@ -128,6 +133,7 @@ public class MainActivity extends AppCompatActivity{
         imgResource = (ImageView)findViewById(R.id.img_rcl);
         btnSaveImage = (Button)findViewById(R.id.btn_save);
         editName = (EditText)findViewById(R.id.edt_name);
+        progressBar = (ProgressBar)findViewById(R.id.progress_bar);
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

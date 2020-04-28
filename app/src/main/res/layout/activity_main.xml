@@ -36,6 +36,11 @@
                 android:textSize="15sp"
                 android:layout_margin="20dp"
                 android:background="#343"/>
+            <ProgressBar
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/progress_bar"/>
         </LinearLayout>
     </LinearLayout>
     <androidx.recyclerview.widget.RecyclerView
